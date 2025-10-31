@@ -30,6 +30,8 @@ export interface SuccessNotificationProps {
 export interface NotificationContextType {
   showSuccessNotification: (message?: string) => void;
   hideSuccessNotification: () => void;
+  showRateLimitNotification: (message?: string) => void;
+  hideRateLimitNotification: () => void;
 }
 
 export interface NotificationProviderProps {

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Image from 'next/image';
@@ -10,6 +10,7 @@ import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useNotification } from '@/contexts/notification-context';
 import { UnifiedFormProps } from '@/types/components';
 import Link from 'next/link';
+import { sendYandexMetricaEvent, YandexMetricaEvents } from '@/lib/yandex-metrica';
 
 export const UnifiedForm: React.FC<UnifiedFormProps> = ({
   source,
@@ -19,7 +20,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
   onSuccess,
   className = ''
 }) => {
-  const { showSuccessNotification } = useNotification();
+  const { showSuccessNotification, showRateLimitNotification } = useNotification();
 
   const form = useForm<UnifiedFormData>({
     resolver: zodResolver(unifiedFormSchema),
@@ -43,6 +44,28 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
       showSuccessNotification();
     }
   });
+
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 640); // sm breakpoint
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
+
+  // Показывать уведомление на desktop при ошибке rate limit
+  useEffect(() => {
+    if (submitError && submitError.includes('Слишком много запросов') && isDesktop) {
+      showRateLimitNotification(submitError);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitError, isDesktop]);
 
   const onSubmit = async (data: UnifiedFormData) => {
     await submitForm(data, form.reset, form.setError);
@@ -163,7 +186,49 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
           </div>
         </div>
 
-        {submitError && (
+        {/* Показывать ошибку rate limit только на mobile, на desktop показывается уведомление */}
+        {submitError && submitError.includes('Слишком много запросов') && !isDesktop && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-3 py-3 rounded relative mt-4 w-full">
+            <div className="flex flex-col gap-3">
+              <p className="text-[0.875rem] font-montserrat font-medium leading-[1.4]">
+                {submitError}
+              </p>
+              <div className="flex items-center justify-center gap-4">
+                <Link 
+                  href="tel:+74952114295" 
+                  onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
+                  className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
+                  aria-label="Позвонить"
+                >
+                  <Image src="/assets/phone-icon.svg" alt="Телефон" fill className="object-contain" />
+                </Link>
+                <Link 
+                  href="https://wa.me/79852114295" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}
+                  className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
+                  aria-label="WhatsApp"
+                >
+                  <Image src="/assets/whatsapp-icon.svg" alt="WhatsApp" fill className="object-contain" />
+                </Link>
+                <Link 
+                  href="https://t.me/nord_laundry_bot" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.TELEGRAM)}
+                  className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
+                  aria-label="Telegram"
+                >
+                  <Image src="/assets/telegram-icon.svg" alt="Telegram" fill className="object-contain" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Остальные ошибки показываем всегда */}
+        {submitError && !submitError.includes('Слишком много запросов') && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4 md:max-w-[20rem]">
             <span className="block sm:inline">{submitError}</span>
           </div>

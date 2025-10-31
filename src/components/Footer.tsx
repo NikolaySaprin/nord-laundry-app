@@ -136,6 +136,19 @@ export function Footer() {
                 Политика конфиденциальности
               </Link>
             </div>
+            <div className="pt-4 border-t border-white/20">
+              <p className="text-white font-montserrat font-medium text-[1rem] leading-[1.5]">
+                Разработано{' '}
+                <Link 
+                  href="https://t.me/nikolaysnow77" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-white underline"
+                >
+                  Snow Studio
+                </Link>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -236,6 +249,21 @@ export function Footer() {
               <Link href="#" className="text-white/50 font-montserrat font-medium text-[0.875rem] leading-[1.71] hover:text-white transition-colors">
                 © {new Date().getFullYear()} Nord Laundry. Все права защищены.
               </Link>
+            </div>
+
+            {/* Developer Credit */}
+            <div className="pt-[1.5rem] border-t border-white">
+            <p className="text-white font-montserrat font-medium text-[0.875rem] leading-[1.71]">
+            Разработано{' '}
+                <Link 
+                  href="https://t.me/nikolaysnow77" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-white  underline"
+                >
+                  Snow Studio
+                </Link>
+              </p>
             </div>
           </div>
         </div>

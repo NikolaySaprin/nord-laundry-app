@@ -30,7 +30,7 @@ export function middleware(req: NextRequest) {
 
     if (isRateLimited(ip)) {
       return NextResponse.json(
-        { error: 'Слишком много запросов. Попробуйте позже.' },
+        { error: 'Слишком много запросов. Свяжитесь с нами любым удобным способом' },
         {
           status: 429,
           headers: {
