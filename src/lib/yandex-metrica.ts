@@ -6,8 +6,15 @@ declare global {
 
 const YANDEX_METRICA_ID = 104366457;
 
-export const initYandexMetrica = () => {
+export const initYandexMetrica = (nonce?: string) => {
   if (typeof window !== 'undefined') {
+    // Check if already initialized by checking if ym function exists and was called
+    if ((window as any).ym && (window as any).ym.a) {
+      return;
+    }
+    
+    // Initialize Yandex Metrica
+    // Using original inline approach - CSP allows unsafe-inline for scripts
     const script = document.createElement('script');
     script.type = 'text/javascript';
     script.innerHTML = `
@@ -38,8 +45,8 @@ export const initYandexMetrica = () => {
 };
 
 export const sendYandexMetricaEvent = (eventName: typeof YandexMetricaEvents[keyof typeof YandexMetricaEvents], params?: any) => {
-  if (typeof window !== 'undefined' && window.ym) {
-    window.ym(YANDEX_METRICA_ID, 'reachGoal', eventName, params);
+  if (typeof window !== 'undefined' && (window as any).ym) {
+    (window as any).ym(YANDEX_METRICA_ID, 'reachGoal', eventName, params);
   }
 };
 

@@ -5,6 +5,7 @@ import { normalizePhoneNumber } from '@/lib/form-validation';
 import { sendYandexMetricaEvent, YandexMetricaEvents } from '@/lib/yandex-metrica';
 import { UseFormSubmitOptions, UseFormSubmitReturn, FormSource } from '@/types/forms';
 import { UseFormReset, UseFormSetError } from 'react-hook-form';
+import { sanitizeText } from '@/lib/sanitize';
 
 function getYandexMetricaEventName(source: FormSource): typeof YandexMetricaEvents[keyof typeof YandexMetricaEvents] | null {
   switch (source) {
@@ -37,7 +38,9 @@ export function useFormSubmit({
     try {
       const normalizedData = {
         ...data,
-        phone: normalizePhoneNumber(data.phone),
+        name: sanitizeText(data.name),
+        sphere: data.sphere ? sanitizeText(data.sphere) : undefined,
+        phone: normalizePhoneNumber(sanitizeText(data.phone)),
         source
       };
       

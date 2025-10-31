@@ -1,4 +1,4 @@
-# Nord Clean Business - Next.js
+# Nord Laundry
 
 Профессиональная прачечная для бизнеса, построенная на Next.js 15 с оптимизацией для SEO.
 
@@ -12,6 +12,7 @@
 - **Swiper** - слайдер
 - **React Hook Form** - управление формами
 - **Zod** - валидация схем
+- **xss** - защита от XSS атак
 
 ## Особенности
 
@@ -21,73 +22,115 @@
 - ✅ **Адаптивный дизайн** - мобильная версия
 - ✅ **Типизация** - полная поддержка TypeScript
 - ✅ **Современный UI** - компоненты Radix UI
-- ✅ **Интеграция с Telegram** - отправка заявок в бот
+- ✅ **Интеграция с Telegram** - отправка заявок через webhook
+- ✅ **Безопасность** - защита от XSS, CSRF, SSRF, rate limiting
 
-## Запуск проекта
+## Быстрый старт
 
-### Next.js приложение
+### Установка зависимостей
 
 ```bash
-# Установка зависимостей
 npm install
+```
 
-# Настройка переменных окружения
+### Настройка переменных окружения
+
+Создать файл `.env.local` в корне проекта на основе `env.example`:
+
+```bash
 cp env.example .env.local
-# Отредактируйте .env.local и добавьте ваши токены
+```
 
-# Запуск в режиме разработки
+Обязательные переменные:
+- `BOT_WEBHOOK_URL` - URL webhook для отправки заявок (только localhost/127.0.0.1)
+- `ALLOWED_ORIGINS` - разрешенные источники для CORS/CSRF (опционально)
+- `NEXT_PUBLIC_API_URL` - публичный URL приложения
+
+### Запуск в режиме разработки
+
+```bash
 npm run dev
+```
 
-# Сборка для продакшена
+Приложение доступно по адресу `http://localhost:3000`
+
+### Сборка для продакшена
+
+```bash
 npm run build
+```
 
-# Запуск продакшен версии
+### Запуск продакшен версии
+
+```bash
 npm start
 ```
-
-### Переменные окружения
-
-Создайте файл `.env.local` в корне проекта:
-
-```bash
-# Telegram Bot Configuration
-TELEGRAM_BOT_TOKEN=your_bot_token_here
-TELEGRAM_GROUP_CHAT_ID=your_group_chat_id_here
-
-# Next.js Configuration
-NEXT_PUBLIC_API_URL=https://your-domain.com
-```
-
 
 ## Структура проекта
 
 ```
-├── src/                    # Next.js приложение
+├── src/
 │   ├── app/                # App Router (Next.js 13+)
+│   │   ├── api/           # API routes
+│   │   ├── globals.css    # Глобальные стили
+│   │   ├── layout.tsx     # Корневой layout
+│   │   └── page.tsx       # Главная страница
 │   ├── components/         # React компоненты
+│   │   ├── client/        # Клиентские компоненты
+│   │   ├── server/        # Серверные компоненты
+│   │   └── ui/            # UI компоненты (Radix UI)
 │   ├── lib/               # Утилиты
-│   └── hooks/             # React хуки
-├── package.json           # Основные зависимости
+│   │   ├── security.ts    # Функции безопасности
+│   │   ├── sanitize.ts    # Санитизация данных
+│   │   └── form-validation.ts # Валидация форм
+│   ├── hooks/             # React хуки
+│   ├── types/             # TypeScript типы
+│   └── middleware.ts      # Next.js middleware
+├── public/                # Статические файлы
+├── package.json           # Зависимости проекта
 ├── next.config.js         # Конфигурация Next.js
 └── ecosystem.config.js    # PM2 конфигурация
 ```
 
 ## SEO настройки
 
-- Мета-теги для социальных сетей (Open Graph, Twitter)
+Проект включает:
+- Мета-теги для социальных сетей (Open Graph)
 - Структурированные данные
-- Sitemap.xml
-- Robots.txt
-- Оптимизация изображений
-- Семантическая разметка
+- Sitemap.xml (автогенерация)
+- Robots.txt (автогенерация)
+- Оптимизация изображений через Next.js Image
+- Семантическая разметка HTML
+
+## Безопасность
+
+Реализованные меры защиты:
+- **XSS Protection** - санитизация всех пользовательских данных
+- **CSRF Protection** - валидация Origin/Referer заголовков
+- **SSRF Protection** - валидация внутренних URL
+- **Rate Limiting** - ограничение количества запросов
+- **Security Headers** - CSP, HSTS, X-Frame-Options и др.
+- **Data Sanitization** - маскировка PII в логах
+
+Подробнее в [SECURITY.md](./SECURITY.md)
 
 ## Развертывание
 
 Проект готов для развертывания на:
-- Vercel (рекомендуется)
+- VPS с Node.js и PM2
+- Vercel
 - Netlify
 - AWS
 - Любой хостинг с поддержкой Node.js
+
+Инструкции по развертыванию в [DEPLOYMENT.md](./DEPLOYMENT.md)
+
+## Доступные скрипты
+
+- `npm run dev` - запуск в режиме разработки
+- `npm run build` - сборка для продакшена
+- `npm start` - запуск продакшен версии
+- `npm run lint` - проверка кода линтером
 
 ## Лицензия
 

@@ -1,11 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { extendedFormSchema } from '@/lib/form-validation';
+import { sanitizePayload, redactPhone } from '@/lib/sanitize';
+import { validateInternalUrl, validateOrigin } from '@/lib/security';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    // CSRF protection: validate Origin header
+    // Next.js has built-in CSRF protection, but we add extra layer
+    // If ALLOWED_ORIGINS is empty, only same-origin requests are allowed
+    const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',').filter(Boolean) || [];
+    
+    // Allow same-origin requests (forms from the same site don't have Origin header)
+    // But validate cross-origin requests if ALLOWED_ORIGINS is configured
+    const origin = request.headers.get('origin');
+    if (origin && !validateOrigin(request, allowedOrigins)) {
+      // Log suspicious request
+      const clientIp = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() 
+        || request.headers.get('x-real-ip') 
+        || 'unknown';
+      console.warn('⚠️ CSRF protection: Blocked request with invalid Origin', {
+        origin: origin,
+        referer: request.headers.get('referer'),
+        host: request.headers.get('host'),
+        ip: clientIp,
+        timestamp: new Date().toISOString()
+      });
+      return NextResponse.json(
+        { error: 'Неразрешенный источник запроса' },
+        { status: 403 }
+      );
+    }
+    
+    // If origin is missing and allowedOrigins is empty, it's likely same-origin (OK)
+    // If origin is missing and allowedOrigins has values, still OK (same-origin)
+    
     const body = await request.json();
     
-    const validationResult = extendedFormSchema.safeParse(body);
+    // Sanitize expected text fields defensively before validation
+    const sanitizedBody = sanitizePayload(body, ['name', 'phone', 'sphere'] as any);
+    const validationResult = extendedFormSchema.safeParse(sanitizedBody);
     if (!validationResult.success) {
       return NextResponse.json(
         { error: 'Неверные данные', details: validationResult.error.issues },
@@ -20,12 +53,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       source: body.source || 'website_form',
     };
 
-    // Отправляем заявку в бот через webhook для создания треда
+    // SSRF protection: validate bot webhook URL
     const botWebhookUrl = process.env.BOT_WEBHOOK_URL || 'http://localhost:3001/api/application';
+    if (!validateInternalUrl(botWebhookUrl)) {
+      console.error('⚠️ Блокирован небезопасный URL для бота:', botWebhookUrl);
+      return NextResponse.json(
+        { error: 'Конфигурационная ошибка сервера' },
+        { status: 500 }
+      );
+    }
     
     console.log('Отправка заявки в бот:', {
       url: botWebhookUrl,
-      application,
+      application: {
+        name: application.name,
+        phone: redactPhone(application.phone),
+        sphere: application.sphere ? '[provided]' : '[empty]',
+        source: application.source,
+      },
       timestamp: new Date().toISOString()
     });
     

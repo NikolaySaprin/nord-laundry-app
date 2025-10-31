@@ -14,6 +14,25 @@ const nextConfig = {
         source: '/(.*)',
         headers: [
           {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              // Next.js requires 'unsafe-inline' and 'unsafe-eval' for hydration and dynamic imports
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://mc.yandex.ru",
+              "connect-src 'self' https://mc.yandex.ru",
+              "img-src 'self' data: https://mc.yandex.ru blob:",
+              "style-src 'self' 'unsafe-inline'",
+              "font-src 'self' data:",
+              "frame-ancestors 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "object-src 'none'",
+              "worker-src 'self' blob:",
+              "child-src 'self' blob:",
+              "upgrade-insecure-requests"
+            ].join('; '),
+          },
+          {
             key: 'X-Frame-Options',
             value: 'DENY',
           },
@@ -22,8 +41,32 @@ const nextConfig = {
             value: 'nosniff',
           },
           {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
             key: 'Referrer-Policy',
             value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'geolocation=(), microphone=(), camera=(), autoplay=(), payment=(), usb=()',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'Cross-Origin-Embedder-Policy',
+            value: 'unsafe-none',
+          },
+          {
+            key: 'Cross-Origin-Resource-Policy',
+            value: 'same-origin',
+          },
+          {
+            key: 'X-XSS-Protection',
+            value: '0',
           },
         ],
       },

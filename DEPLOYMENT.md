@@ -1,178 +1,109 @@
 # Инструкции по развертыванию
 
-Этот документ описывает процесс развертывания двух отдельных проектов (Next.js приложение и Telegram бот) на VPS с использованием PM2 и GitHub Actions для автоматического развертывания.
+Документ описывает процесс развертывания Next.js приложения на VPS с использованием PM2 и GitHub Actions для автоматического развертывания.
 
-## 🚀 Автоматическое развертывание (Рекомендуется)
+## Автоматическое развертывание (Рекомендуется)
 
 Проект настроен для автоматического развертывания через GitHub Actions. При пуше в ветку `main` автоматически запускается деплой на VPS.
 
-**Требуемые секреты в GitHub:**
-- `VPS_HOST` - IP адрес или домен вашего VPS
+### Требуемые секреты в GitHub
+
+- `VPS_HOST` - IP адрес или домен VPS
 - `VPS_USER` - имя пользователя для SSH подключения
 - `VPS_SSH_KEY` - приватный SSH ключ для подключения к серверу
 
-**Что происходит при автоматическом деплое:**
+### Процесс автоматического деплоя
+
 1. Обновляется код в `/var/www/html/nord-laundry-app/`
 2. Устанавливаются зависимости (`npm install`)
 3. Собирается приложение (`npm run build`)
 4. Копируется `ecosystem.config.js` в `/var/www/html/`
 5. Создаются папки для логов
-6. Перезапускаются все PM2 процессы
+6. Перезапускаются PM2 процессы
 
-## 📁 Структура на сервере
-
-На сервере проекты будут размещены в следующих папках:
+## Структура на сервере
 
 ```
 /var/www/html/
-├── nord-laundry-app/     # Next.js приложение
-│   ├── assets/           # Статические изображения (обслуживаются Nginx)
-│   ├── public/           # Публичные файлы Next.js
+├── nord-laundry-app/          # Приложение
+│   ├── .next/                 # Собранное приложение
+│   ├── logs/                  # Логи приложения
+│   ├── .env.local             # Переменные окружения
 │   └── ...
-└── nord-laundry-telegram-bot/     # Telegram бот
+└── ecosystem.config.js        # PM2 конфигурация
 ```
 
-## 🛠 Ручное развертывание
+## Ручное развертывание
 
-Если вы предпочитаете ручное развертывание или хотите настроить сервер в первый раз:
+Для первого развертывания или ручной настройки сервера:
 
-## 🔧 Исправление проблем с деплоем
+### Развертывание Next.js приложения
 
-### Проблема: PM2 не может найти ecosystem.config.js
+1. Клонирование репозитория:
 
-Если вы видите ошибки типа:
-```
-Error: M2][ERROR] File ecosystem.config.js not found
-npm error path /var/www/html/package.json
-```
-
-**Решение:**
-
-1. Остановите все процессы PM2:
-```bash
-pm2 stop all
-pm2 delete all
-```
-
-2. Убедитесь, что файл ecosystem.config.js находится в правильном месте:
-```bash
-# Проверьте структуру
-ls -la /var/www/html/
-# Должно быть:
-# nord-laundry-app/
-# nord-laundry-telegram-bot/
-# ecosystem.config.js (этот файл должен быть здесь!)
-```
-
-3. Если ecosystem.config.js отсутствует в /var/www/html/, скопируйте его:
-```bash
-cp /var/www/html/nord-laundry-app/ecosystem.config.js /var/www/html/
-```
-
-4. Создайте папки для логов:
-```bash
-mkdir -p /var/www/html/nord-laundry-app/logs
-mkdir -p /var/www/html/nord-laundry-telegram-bot/logs
-```
-
-5. Запустите приложения:
-```bash
-cd /var/www/html
-pm2 start ecosystem.config.js
-```
-
-## Развертывание Next.js приложения
-
-1. Клонируйте репозиторий приложения:
 ```bash
 cd /var/www/html
 git clone <repository-url> nord-laundry-app
 cd nord-laundry-app
 ```
 
-2. Установите зависимости:
+2. Установка зависимостей:
+
 ```bash
 npm install
 ```
 
-3. Настройте переменные окружения:
+3. Настройка переменных окружения:
+
 ```bash
-# Скопируйте пример файла
+# Копирование примера файла
 cp env.example .env.local
 
-# Отредактируйте .env.local и добавьте ваши токены
+# Редактирование .env.local
 nano .env.local
 ```
 
-4. Соберите приложение:
+4. Сборка приложения:
+
 ```bash
 npm run build
 ```
 
-5. Создайте папку для логов:
-```bash
-mkdir -p logs
-```
+5. Создание папки для логов:
 
-## Развертывание Telegram бота
-
-1. Клонируйте репозиторий бота:
-```bash
-cd /var/www/html
-git clone <bot-repository-url> nord-laundry-telegram-bot
-cd nord-laundry-telegram-bot
-```
-
-2. Установите зависимости:
-```bash
-npm install
-```
-
-3. Настройте переменные окружения:
-```bash
-# Скопируйте пример файла
-cp env.example .env
-
-# Отредактируйте .env и добавьте ваши токены
-nano .env
-```
-
-4. Скомпилируйте TypeScript:
-```bash
-npm run build
-```
-
-5. Создайте папку для логов:
 ```bash
 mkdir -p logs
 ```
 
 ## Настройка PM2
 
-1. Установите PM2 глобально:
+1. Установка PM2 глобально:
+
 ```bash
 npm install -g pm2
 ```
 
-2. Скопируйте ecosystem.config.js в корень /var/www/html:
+2. Копирование ecosystem.config.js в корень `/var/www/html`:
+
 ```bash
-# Скопируйте из приложения
 cp /var/www/html/nord-laundry-app/ecosystem.config.js /var/www/html/
 ```
 
-3. Создайте папки для логов:
+3. Создание папок для логов:
+
 ```bash
 mkdir -p /var/www/html/nord-laundry-app/logs
-mkdir -p /var/www/html/nord-laundry-telegram-bot/logs
 ```
 
-4. Запустите приложения:
+4. Запуск приложения:
+
 ```bash
 cd /var/www/html
 pm2 start ecosystem.config.js
 ```
 
-5. Настройте автозапуск:
+5. Настройка автозапуска:
+
 ```bash
 pm2 startup
 pm2 save
@@ -187,14 +118,8 @@ pm2 status
 # Просмотр логов приложения
 pm2 logs nord-laundry-app
 
-# Просмотр логов бота
-pm2 logs nord-laundry-telegram-bot
-
 # Перезапуск приложения
 pm2 restart nord-laundry-app
-
-# Перезапуск бота
-pm2 restart nord-laundry-telegram-bot
 
 # Остановка всех процессов
 pm2 stop all
@@ -205,7 +130,8 @@ pm2 delete all
 
 ## Обновление
 
-### Обновление приложения:
+### Обновление приложения
+
 ```bash
 cd /var/www/html/nord-laundry-app
 git pull origin main
@@ -214,57 +140,36 @@ npm run build
 pm2 restart nord-laundry-app
 ```
 
-### Обновление бота:
-```bash
-cd /var/www/html/nord-laundry-telegram-bot
-git pull origin main
-npm install
-npm run build
-pm2 restart nord-laundry-telegram-bot
-```
-
 ## Логи
 
-Логи сохраняются в следующих местах:
-- Приложение: `/var/www/html/nord-laundry-app/logs/`
-- Бот: `/var/www/html/nord-laundry-telegram-bot/logs/`
+Логи сохраняются в `/var/www/html/nord-laundry-app/logs/`
 
 ## Переменные окружения
 
-### Приложение (.env.local):
-```
-# Webhook для отправки заявок в бот
+### Приложение (.env.local)
+
+```bash
+# Webhook для отправки заявок (только localhost для безопасности)
 BOT_WEBHOOK_URL=http://localhost:3001/api/application
 
 # Next.js Configuration
 NEXT_PUBLIC_API_URL=https://nord-laundry.ru
 
-# Добавьте другие необходимые переменные для Next.js приложения
+# Разрешенные источники для CORS/CSRF (через запятую)
+ALLOWED_ORIGINS=https://nord-laundry.ru,http://localhost:3000
 ```
 
-**ВАЖНО:** Файл `.env.local` должен быть создан на сервере в папке `/var/www/html/nord-laundry-app/`
+**Важно**: Файл `.env.local` должен быть создан на сервере в папке `/var/www/html/nord-laundry-app/`. Без этого файла форма на сайте будет возвращать ошибку 500.
 
-Без этого файла форма на сайте будет возвращать ошибку 500!
+**Внимание**: `BOT_WEBHOOK_URL` должен указывать только на localhost/127.0.0.1 для предотвращения SSRF атак.
 
-### Бот (.env):
-```
-TELEGRAM_BOT_TOKEN=your_bot_token_here
-TELEGRAM_GROUP_CHAT_ID=your_group_chat_id_here
-ENABLE_WHATSAPP=true
-WEBHOOK_SECRET=your-secret-key-here
-```
+## Настройка Nginx
 
-**Важно:** Архитектура интеграции:
-- **Приложение** отправляет заявки в бот через webhook для создания тредов
-- **Бот** обрабатывает все заявки (с сайта, WhatsApp, Telegram) и создает темы в группе
-
-## 🌐 Настройка Nginx
-
-Для правильной работы статических файлов (изображений) необходимо настроить Nginx:
+Для правильной работы статических файлов (изображений) настраивается Nginx.
 
 ### Конфигурация Nginx для nord-laundry.ru
 
-Создайте файл `/etc/nginx/sites-available/nord-laundry.ru`:
+Создание файла `/etc/nginx/sites-available/nord-laundry.ru`:
 
 ```nginx
 server {
@@ -273,7 +178,7 @@ server {
 
     # Обслуживание статических изображений напрямую
     location /assets/ {
-        alias /var/www/html/nord-laundry-app/assets/;
+        alias /var/www/html/nord-laundry-app/public/assets/;
         expires 30d;
         add_header Cache-Control "public, immutable";
         
@@ -299,24 +204,71 @@ server {
 }
 ```
 
-### Активация конфигурации:
+### Активация конфигурации
 
 ```bash
-# Создать символическую ссылку
+# Создание символической ссылки
 sudo ln -s /etc/nginx/sites-available/nord-laundry.ru /etc/nginx/sites-enabled/
 
-# Проверить конфигурацию
+# Проверка конфигурации
 sudo nginx -t
 
-# Перезагрузить Nginx
+# Перезагрузка Nginx
 sudo systemctl reload nginx
 ```
 
-### Проверка работы:
+### Проверка работы
 
 ```bash
-# Проверить, что изображения доступны
+# Проверка доступности изображений
 curl -I http://nord-laundry.ru/assets/logo_nord.svg
 
 # Должен вернуть 200 OK
+```
+
+## Исправление проблем с деплоем
+
+### Проблема: PM2 не может найти ecosystem.config.js
+
+При ошибках типа:
+```
+Error: PM2][ERROR] File ecosystem.config.js not found
+npm error path /var/www/html/package.json
+```
+
+**Решение:**
+
+1. Остановка всех процессов PM2:
+
+```bash
+pm2 stop all
+pm2 delete all
+```
+
+2. Проверка структуры:
+
+```bash
+ls -la /var/www/html/
+# Должно быть:
+# nord-laundry-app/
+# ecosystem.config.js (этот файл должен быть здесь!)
+```
+
+3. Если ecosystem.config.js отсутствует в `/var/www/html/`, скопировать его:
+
+```bash
+cp /var/www/html/nord-laundry-app/ecosystem.config.js /var/www/html/
+```
+
+4. Создание папок для логов:
+
+```bash
+mkdir -p /var/www/html/nord-laundry-app/logs
+```
+
+5. Запуск приложения:
+
+```bash
+cd /var/www/html
+pm2 start ecosystem.config.js
 ```

@@ -9,7 +9,7 @@ export default function PrivacyPolicyPage() {
       <main className="pt-[5rem] sm:pt-[5rem]">
         <div className="container mx-auto px-4 py-8 sm:py-16">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-[#202124] font-montserrat font-bold text-[2rem] sm:text-[2.5rem] leading-[1.2] mb-8 text-center">
+            <h1 className="text-[#202124] font-montserrat font-bold text-[1.25rem] sm:text-[2rem] md:text-[2.5rem] leading-[1.3] mb-8 text-center break-words px-2">
               ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ
             </h1>
             
