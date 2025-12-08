@@ -68,6 +68,10 @@ const nextConfig = {
             key: 'X-XSS-Protection',
             value: '0',
           },
+          {
+            key: 'X-Robots-Tag',
+            value: 'noindex, nofollow, noarchive, nosnippet',
+          },
         ],
       },
     ]
