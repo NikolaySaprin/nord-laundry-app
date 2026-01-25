@@ -61,6 +61,7 @@ export function ClientsAndCases() {
     { name: "Бабин Двор", id: 8, logo: "/assets/babin-dvor.webp" },
     { name: "BP", id: 9, logo: "/assets/bp-logo.svg" },
     { name: "Star", id: 10, logo: "/assets/star-logo.webp" },
+    { name: "VAI-TAI", id: 11, logo: "/assets/vai-tai.webp" },
   ]
 
   const cases = [
