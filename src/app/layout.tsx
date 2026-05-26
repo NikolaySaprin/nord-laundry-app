@@ -98,7 +98,7 @@ const structuredData = {
   "logo": "https://nord-laundry.ru/assets/logo_nord.svg",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+7-495-211-42-95",
+    "telephone": "+7-950-483-60-65",
     "contactType": "customer service",
     "availableLanguage": "Russian"
   },

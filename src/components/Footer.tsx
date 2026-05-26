@@ -39,7 +39,7 @@ export function Footer() {
             <div className="flex-shrink-0">
               <div className="flex flex-col gap-[1.25rem]">
                 <Button asChild className="bg-transparent border border-white text-white font-montserrat font-medium text-[1rem] leading-[1.5] px-[2.125rem] py-[1.6875rem] rounded-[3.125rem] flex items-center justify-center gap-[0.75rem] w-[20.36rem] h-[3.5rem] uppercase hover:bg-white/10 transition-colors">
-                  <Link href="https://wa.me/79852114295" target="_blank" rel="noopener noreferrer" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}>
+                  <Link href="https://wa.me/79504836065" target="_blank" rel="noopener noreferrer" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}>
                     Написать в Whatsapp
                     <div className="w-[2rem] h-[2rem] relative">
                       <Image src="/assets/whatsapp-icon.svg" alt="WhatsApp" fill className="object-contain" />
@@ -57,7 +57,7 @@ export function Footer() {
                 </Button>
 
                 <Button asChild className="bg-transparent border border-white text-white font-montserrat font-medium text-[1rem] leading-[1.5] px-[2.125rem] py-[1.6875rem] rounded-[3.125rem] flex items-center justify-center w-[20.36rem] h-[3.5rem] uppercase hover:bg-white/10 transition-colors relative">
-                  <Link href="tel:+74952114295" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}>
+                  <Link href="tel:+79504836065" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}>
                     <span className="absolute left-1/2 transform -translate-x-1/2">Позвонить</span>
                     <div className="w-[2rem] h-[2rem] relative ml-[13.5rem]">
                       <Image src="/assets/phone-icon.svg" alt="Phone" fill className="object-contain" />
@@ -99,8 +99,8 @@ export function Footer() {
                     <p className="text-white/50 font-montserrat font-medium text-[1rem] leading-[1.5] uppercase mb-2">
                       ТЕЛЕФОН:
                     </p>
-                    <Link href="tel:+74952114295" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)} className="text-white font-montserrat font-medium text-[1.5rem] leading-[1] hover:text-white/80 transition-colors" >
-                      +7 (495) 211-42-95
+                    <Link href="tel:+79504836065" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)} className="text-white font-montserrat font-medium text-[1.5rem] leading-[1] hover:text-white/80 transition-colors" >
+                      +7 (950) 483-60-65
                     </Link>
                   </div>
 
@@ -108,8 +108,8 @@ export function Footer() {
                     <p className="text-white/50 font-montserrat font-medium text-[1rem] leading-[1.5] uppercase mb-2">
                       ПОЧТА:
                     </p>
-                    <Link href="mailto:info@nord-laundry.ru" className="text-white font-montserrat font-medium text-[1.5rem] leading-[1] hover:text-white/80 transition-colors">
-                      info@nord-laundry.ru
+                    <Link href="mailto:nordlaundry@gmail.com" className="text-white font-montserrat font-medium text-[1.5rem] leading-[1] hover:text-white/80 transition-colors">
+                      nordlaundry@gmail.com
                     </Link>
                   </div>
 
@@ -178,7 +178,7 @@ export function Footer() {
             {/* Contact Buttons */}
             <div className="flex flex-col gap-[1.5rem]">
               <Button asChild className="bg-transparent border border-white text-white font-montserrat font-medium text-[0.875rem] leading-[1.71] px-[2.125rem] py-[1rem] rounded-[3.125rem] flex items-center justify-end w-full uppercase relative">
-                <Link href="https://wa.me/79852114295" target="_blank" rel="noopener noreferrer" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}>
+                <Link href="https://wa.me/79504836065" target="_blank" rel="noopener noreferrer" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}>
                   <span className="absolute left-1/2 transform -translate-x-1/2">Написать в Whatsapp</span>
                   <div className="w-[1.5rem] h-[1.5rem] relative ml-[4rem]">
                     <Image src="/assets/whatsapp-icon.svg" alt="WhatsApp" fill className="object-contain" />
@@ -196,7 +196,7 @@ export function Footer() {
               </Button>
 
               <Button asChild className="bg-transparent border border-white text-white font-montserrat font-medium text-[0.875rem] leading-[1.71] px-[2.125rem] py-[1rem] rounded-[3.125rem] flex items-center justify-end w-full uppercase relative">
-                <Link href="tel:+74952114295" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}>
+                <Link href="tel:+79504836065" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}>
                   <span className="absolute left-1/2 transform -translate-x-1/2">Позвонить</span>
                   <div className="w-[1.5rem] h-[1.5rem] relative ml-[4rem]">
                     <Image src="/assets/phone-icon.svg" alt="Phone" fill className="object-contain" />
@@ -216,8 +216,8 @@ export function Footer() {
                   <p className="text-white/50 font-montserrat font-medium text-[0.875rem] leading-[1.71] uppercase">
                     ТЕЛЕФОН:
                   </p>
-                  <Link href="tel:+74952114295" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)} className="text-white font-montserrat font-medium text-[1.125rem] leading-[1.33] hover:text-white/80 transition-colors">
-                    +7 (495) 211-42-95
+                  <Link href="tel:+79504836065" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)} className="text-white font-montserrat font-medium text-[1.125rem] leading-[1.33] hover:text-white/80 transition-colors">
+                    +7 (950) 483-60-65
                   </Link>
                 </div>
 
@@ -225,8 +225,8 @@ export function Footer() {
                   <p className="text-white/50 font-montserrat font-medium text-[0.875rem] leading-[1.71] uppercase">
                     Почта:
                   </p>
-                  <Link href="mailto:info@nord-laundry.ru" className="text-white font-montserrat font-medium text-[1.125rem] leading-[1.33]">
-                    info@nord-laundry.ru
+                  <Link href="mailto:nordlaundry@gmail.com" className="text-white font-montserrat font-medium text-[1.125rem] leading-[1.33]">
+                    nordlaundry@gmail.com
                   </Link>
                 </div>
 
