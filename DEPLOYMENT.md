@@ -1,205 +1,235 @@
 # Инструкции по развертыванию
 
-Документ описывает процесс развертывания Next.js приложения на VPS с использованием PM2 и GitHub Actions для автоматического развертывания.
+Документ описывает процесс развертывания Next.js приложения на VPS с использованием Docker и Docker Compose для безопасного и изолированного запуска.
 
-## Автоматическое развертывание (Рекомендуется)
+## Архитектура развертывания
 
-Проект настроен для автоматического развертывания через GitHub Actions. При пуше в ветку `main` автоматически запускается деплой на VPS.
-
-### Требуемые секреты в GitHub
-
-- `VPS_HOST` - IP адрес или домен VPS
-- `VPS_USER` - имя пользователя для SSH подключения
-- `VPS_SSH_KEY` - приватный SSH ключ для подключения к серверу
-
-### Процесс автоматического деплоя
-
-1. Обновляется код в `/var/www/html/nord-laundry-app/`
-2. Устанавливаются зависимости (`npm install`)
-3. Собирается приложение (`npm run build`)
-4. Копируется `ecosystem.config.js` в `/var/www/html/`
-5. Создаются папки для логов
-6. Перезапускаются PM2 процессы
+Проект развертывается с использованием Docker Compose, который обеспечивает:
+- Изоляцию сервисов через Docker контейнеры
+- Безопасность через read-only файловые системы и ограничение прав
+- Автоматический перезапуск при сбоях
+- Управление зависимостями между сервисами
 
 ## Структура на сервере
 
 ```
-/var/www/html/
-├── nord-laundry-app/          # Приложение
-│   ├── .next/                 # Собранное приложение
-│   ├── logs/                  # Логи приложения
-│   ├── .env.local             # Переменные окружения
+/srv/nord/
+├── web/                    # Next.js приложение
+│   ├── Dockerfile          # Docker образ для веб-приложения
+│   ├── .env.production     # Переменные окружения для продакшена
 │   └── ...
-└── ecosystem.config.js        # PM2 конфигурация
+├── bot/                    # Telegram/WhatsApp бот
+│   ├── Dockerfile          # Docker образ для бота
+│   ├── .env.production     # Переменные окружения для бота
+│   └── ...
+└── docker-compose.yml      # Конфигурация Docker Compose
 ```
+
+## Требования
+
+- Ubuntu 22.04+ или другой Linux дистрибутив
+- Docker Engine 20.10+
+- Docker Compose v2.0+
+- Node.js 22+ (для сборки образов)
+- Nginx (для reverse proxy)
 
 ## Ручное развертывание
 
-Для первого развертывания или ручной настройки сервера:
-
-### Развертывание Next.js приложения
-
-1. Клонирование репозитория:
+### 1. Подготовка сервера
 
 ```bash
-cd /var/www/html
-git clone <repository-url> nord-laundry-app
-cd nord-laundry-app
+# Установка Docker (если не установлен)
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+
+# Установка Docker Compose plugin
+sudo mkdir -p /usr/local/lib/docker/cli-plugins
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 ```
 
-2. Установка зависимостей:
+### 2. Клонирование и настройка проекта
 
 ```bash
-npm install
+# Создание директории для проектов
+sudo mkdir -p /srv/nord
+sudo chown -R $USER:$USER /srv/nord
+
+# Клонирование репозиториев
+cd /srv/nord
+git clone <repository-url> web
+git clone <bot-repository-url> bot
 ```
 
-3. Настройка переменных окружения:
+### 3. Настройка переменных окружения
+
+#### Веб-приложение (`/srv/nord/web/.env.production`)
 
 ```bash
-# Копирование примера файла
-cp env.example .env.local
-
-# Редактирование .env.local
-nano .env.local
-```
-
-4. Сборка приложения:
-
-```bash
-npm run build
-```
-
-5. Создание папки для логов:
-
-```bash
-mkdir -p logs
-```
-
-## Настройка PM2
-
-1. Установка PM2 глобально:
-
-```bash
-npm install -g pm2
-```
-
-2. Копирование ecosystem.config.js в корень `/var/www/html`:
-
-```bash
-cp /var/www/html/nord-laundry-app/ecosystem.config.js /var/www/html/
-```
-
-3. Создание папок для логов:
-
-```bash
-mkdir -p /var/www/html/nord-laundry-app/logs
-```
-
-4. Запуск приложения:
-
-```bash
-cd /var/www/html
-pm2 start ecosystem.config.js
-```
-
-5. Настройка автозапуска:
-
-```bash
-pm2 startup
-pm2 save
-```
-
-## Мониторинг
-
-```bash
-# Просмотр статуса всех процессов
-pm2 status
-
-# Просмотр логов приложения
-pm2 logs nord-laundry-app
-
-# Перезапуск приложения
-pm2 restart nord-laundry-app
-
-# Остановка всех процессов
-pm2 stop all
-
-# Удаление всех процессов
-pm2 delete all
-```
-
-## Обновление
-
-### Обновление приложения
-
-```bash
-cd /var/www/html/nord-laundry-app
-git pull origin main
-npm install
-npm run build
-pm2 restart nord-laundry-app
-```
-
-## Логи
-
-Логи сохраняются в `/var/www/html/nord-laundry-app/logs/`
-
-## Переменные окружения
-
-### Приложение (.env.local)
-
-```bash
-# Webhook для отправки заявок (только localhost для безопасности)
-BOT_WEBHOOK_URL=http://localhost:3001/api/application
-
-# Next.js Configuration
+NODE_ENV=production
+BOT_WEBHOOK_URL=http://webhook:3001/api/application
+INTERNAL_SERVICE_HOSTS=bot,webhook
+ALLOWED_ORIGINS=https://nord-laundry.ru
 NEXT_PUBLIC_API_URL=https://nord-laundry.ru
-
-# Разрешенные источники для CORS/CSRF (через запятую)
-ALLOWED_ORIGINS=https://nord-laundry.ru,http://localhost:3000
 ```
 
-**Важно**: Файл `.env.local` должен быть создан на сервере в папке `/var/www/html/nord-laundry-app/`. Без этого файла форма на сайте будет возвращать ошибку 500.
+#### Бот (`/srv/nord/bot/.env.production`)
 
-**Внимание**: `BOT_WEBHOOK_URL` должен указывать только на localhost/127.0.0.1 для предотвращения SSRF атак.
+```bash
+NODE_ENV=production
+TELEGRAM_BOT_TOKEN=your_telegram_bot_token
+TELEGRAM_GROUP_CHAT_ID=your_group_chat_id
+ENABLE_WHATSAPP=true
+CREATE_AUTH_ARCHIVE=false
+```
+
+### 4. Создание Docker Compose конфигурации
+
+Создайте файл `/srv/nord/docker-compose.yml`:
+
+```yaml
+networks:
+  internal:
+    driver: bridge
+
+services:
+  web:
+    build: ./web
+    command: ["npm","run","start"]
+    env_file: ./web/.env.production
+    environment:
+      NODE_ENV: production
+      NEXT_TELEMETRY_DISABLED: "1"
+    user: "1001:1001"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    depends_on: [bot, webhook]
+    ports:
+      - "127.0.0.1:3005:3000"
+    networks: [internal]
+    restart: unless-stopped
+
+  bot:
+    build: ./bot
+    command: ["node","bot-runner.mjs"]
+    env_file: ./bot/.env.production
+    environment:
+      NODE_ENV: production
+    user: "1001:1001"
+    read_only: true
+    volumes:
+      - bot-auth:/app/.wwebjs_auth
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    expose:
+      - "3001"
+    networks: [internal]
+    restart: unless-stopped
+
+  webhook:
+    build: ./bot
+    command: ["node","webhook-server.mjs"]
+    env_file: ./bot/.env.production
+    environment:
+      NODE_ENV: production
+    user: "1001:1001"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: ["ALL"]
+    expose:
+      - "3001"
+    networks: [internal]
+    restart: unless-stopped
+
+volumes:
+  bot-auth:
+```
+
+### 5. Сборка и запуск
+
+```bash
+cd /srv/nord
+
+# Сборка образов
+docker compose build
+
+# Запуск сервисов
+docker compose up -d
+
+# Проверка статуса
+docker compose ps
+
+# Просмотр логов
+docker compose logs -f
+```
 
 ## Настройка Nginx
 
-Для правильной работы статических файлов (изображений) настраивается Nginx.
+Nginx используется как reverse proxy для HTTPS и маршрутизации трафика к контейнерам.
 
-### Конфигурация Nginx для nord-laundry.ru
+### Конфигурация Nginx
 
-Создание файла `/etc/nginx/sites-available/nord-laundry.ru`:
+Создайте файл `/etc/nginx/sites-available/nord-laundry`:
 
 ```nginx
 server {
     listen 80;
     server_name nord-laundry.ru www.nord-laundry.ru;
+    return 301 https://$host$request_uri;
+}
 
-    # Обслуживание статических изображений напрямую
-    location /assets/ {
-        alias /var/www/html/nord-laundry-app/public/assets/;
-        expires 30d;
-        add_header Cache-Control "public, immutable";
-        
-        # Поддержка различных форматов изображений
-        location ~* \.(jpg|jpeg|png|gif|svg|webp)$ {
-            expires 1y;
-            add_header Cache-Control "public, immutable";
-        }
-    }
+server {
+    listen 443 ssl http2;
+    server_name nord-laundry.ru www.nord-laundry.ru;
 
-    # Проксирование к Next.js приложению
+    ssl_certificate /etc/letsencrypt/live/nord-laundry.ru/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/nord-laundry.ru/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/nord-laundry.ru/chain.pem;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+    ssl_prefer_server_ciphers off;
+    ssl_protocols TLSv1.2 TLSv1.3;
+
+    add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+    add_header X-Frame-Options "SAMEORIGIN" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header X-XSS-Protection "1; mode=block" always;
+
     location / {
-        proxy_pass http://127.0.0.1:3000;
+        proxy_pass http://127.0.0.1:3005;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
+        proxy_set_header Connection "upgrade";
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Host $host;
+        proxy_set_header X-Forwarded-Port $server_port;
         proxy_cache_bypass $http_upgrade;
+        proxy_read_timeout 60s;
+        proxy_send_timeout 60s;
+    }
+
+    location ~ /(\.)(?!well-known) {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+
+    location ~* (\.env|\.git|wp-config) {
+        deny all;
+        return 404;
     }
 }
 ```
@@ -208,7 +238,7 @@ server {
 
 ```bash
 # Создание символической ссылки
-sudo ln -s /etc/nginx/sites-available/nord-laundry.ru /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/nord-laundry /etc/nginx/sites-enabled/
 
 # Проверка конфигурации
 sudo nginx -t
@@ -217,58 +247,130 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
-### Проверка работы
+## Мониторинг и управление
+
+### Просмотр статуса
 
 ```bash
-# Проверка доступности изображений
-curl -I http://nord-laundry.ru/assets/logo_nord.svg
+cd /srv/nord
 
-# Должен вернуть 200 OK
+# Статус всех сервисов
+docker compose ps
+
+# Логи всех сервисов
+docker compose logs
+
+# Логи конкретного сервиса
+docker compose logs web
+docker compose logs bot
+docker compose logs webhook
+
+# Следить за логами в реальном времени
+docker compose logs -f
 ```
 
-## Исправление проблем с деплоем
-
-### Проблема: PM2 не может найти ecosystem.config.js
-
-При ошибках типа:
-```
-Error: PM2][ERROR] File ecosystem.config.js not found
-npm error path /var/www/html/package.json
-```
-
-**Решение:**
-
-1. Остановка всех процессов PM2:
+### Перезапуск сервисов
 
 ```bash
-pm2 stop all
-pm2 delete all
+cd /srv/nord
+
+# Перезапуск всех сервисов
+docker compose restart
+
+# Перезапуск конкретного сервиса
+docker compose restart web
+
+# Пересоздание и перезапуск (после изменений в коде)
+docker compose up -d --force-recreate web
 ```
 
-2. Проверка структуры:
+### Обновление приложения
 
 ```bash
-ls -la /var/www/html/
-# Должно быть:
-# nord-laundry-app/
-# ecosystem.config.js (этот файл должен быть здесь!)
+cd /srv/nord
+
+# Обновление кода
+cd web
+git pull origin main
+cd ../bot
+git pull origin main
+cd ..
+
+# Пересборка и перезапуск
+docker compose build
+docker compose up -d
 ```
 
-3. Если ecosystem.config.js отсутствует в `/var/www/html/`, скопировать его:
+## Безопасность
+
+### Ограничения контейнеров
+
+- **Read-only файловая система**: Контейнеры работают в режиме только для чтения
+- **No new privileges**: Контейнеры не могут повышать привилегии
+- **Capability dropping**: Все Linux capabilities удалены
+- **Non-root user**: Контейнеры работают от пользователя с UID 1001
+- **Network isolation**: Сервисы изолированы в отдельной Docker сети
+
+### Firewall правила
+
+Настроены iptables правила для ограничения исходящего трафика из контейнеров:
+- Разрешены только необходимые соединения (Telegram API, внутренняя сеть)
+- Блокировка всех остальных исходящих соединений
+
+## Переменные окружения
+
+### Веб-приложение
+
+- `BOT_WEBHOOK_URL` - URL webhook для отправки заявок (только внутренние хосты)
+- `INTERNAL_SERVICE_HOSTS` - Разрешенные внутренние хосты (через запятую)
+- `ALLOWED_ORIGINS` - Разрешенные источники для CORS/CSRF
+- `NEXT_PUBLIC_API_URL` - Публичный URL приложения
+
+**Важно**: `BOT_WEBHOOK_URL` должен указывать только на внутренние хосты (bot, webhook) для предотвращения SSRF атак.
+
+### Бот
+
+- `TELEGRAM_BOT_TOKEN` - Токен Telegram бота
+- `TELEGRAM_GROUP_CHAT_ID` - ID группы Telegram для заявок
+- `ENABLE_WHATSAPP` - Включить/выключить WhatsApp бота
+
+## Устранение проблем
+
+### Контейнеры не запускаются
 
 ```bash
-cp /var/www/html/nord-laundry-app/ecosystem.config.js /var/www/html/
+# Проверка логов
+docker compose logs
+
+# Проверка конфигурации
+docker compose config
+
+# Пересоздание контейнеров
+docker compose down
+docker compose up -d
 ```
 
-4. Создание папок для логов:
+### Проблемы с сетью
 
 ```bash
-mkdir -p /var/www/html/nord-laundry-app/logs
+# Проверка сети
+docker network inspect nord_internal
+
+# Пересоздание сети
+docker compose down
+docker compose up -d
 ```
 
-5. Запуск приложения:
+### Проблемы с правами доступа
 
 ```bash
-cd /var/www/html
-pm2 start ecosystem.config.js
+# Проверка владельца файлов
+ls -la /srv/nord
+
+# Исправление прав
+sudo chown -R deployer:deployer /srv/nord
 ```
+
+## Автоматическое развертывание
+
+Для автоматического развертывания через GitHub Actions см. `.github/workflows/deploy.yml`.

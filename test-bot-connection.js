@@ -52,8 +52,8 @@ const testBotConnection = async () => {
     console.log('4. Bot is running on a different host/port');
     
     console.log('\n🔧 Suggestions:');
-    console.log('1. Check if bot is running: ps aux | grep node');
-    console.log('2. Check bot logs: pm2 logs nord-laundry-telegram-bot');
+    console.log('1. Check if bot is running: docker compose ps');
+    console.log('2. Check bot logs: docker compose logs webhook');
     console.log('3. Try: curl -X POST http://127.0.0.1:3001/api/application -H "Content-Type: application/json" -d \'{"name":"Test","phone":"+79991234567"}\'');
   }
 };

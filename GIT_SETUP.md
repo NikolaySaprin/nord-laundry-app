@@ -122,7 +122,7 @@ jobs:
           git pull origin main
           npm install
           npm run build
-          pm2 restart nord-laundry-app
+          cd /srv/nord && docker compose restart web
 ```
 
 ## Команды для работы с репозиторием
@@ -192,9 +192,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# PM2
-.pm2/
-logs/
+# Docker
 *.log
 
 # IDE

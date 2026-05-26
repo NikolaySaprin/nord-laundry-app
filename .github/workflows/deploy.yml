@@ -19,32 +19,20 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           debug: true
           script: |
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-            
-            # Обновляем код приложения
-            cd /var/www/html/nord-laundry-app
+            # Обновляем код веб-приложения
+            cd /srv/nord/web
             git fetch --all
             git reset --hard origin/main
             
-            # Устанавливаем зависимости и собираем приложение
-            npm install
-            npm run build
+            # Обновляем код бота (если репозиторий отдельный)
+            # cd /srv/nord/bot
+            # git fetch --all
+            # git reset --hard origin/main
             
-            # Создаем папки для логов если их нет
-            mkdir -p /var/www/html/nord-laundry-app/logs
-            mkdir -p /var/www/html/nord-laundry-telegram-bot/logs
+            # Пересобираем и перезапускаем контейнеры
+            cd /srv/nord
+            docker compose build web
+            docker compose up -d --force-recreate web
             
-            # Убеждаемся, что папка assets находится в корне проекта
-            if [ ! -d "/var/www/html/nord-laundry-app/assets" ]; then
-                echo "Assets folder not found, creating symlink or moving from public"
-                if [ -d "/var/www/html/nord-laundry-app/public/assets" ]; then
-                    mv /var/www/html/nord-laundry-app/public/assets /var/www/html/nord-laundry-app/
-                fi
-            fi
-            
-            # Перезапускаем только приложение nord-laundry-app
-            pm2 reload nord-laundry-app --update-env || pm2 start /var/www/html/nord-laundry-app/ecosystem.config.js --env production
-            
-            # Сохраняем процесс лист для автозагрузки
-            pm2 save
+            # Проверяем статус
+            docker compose ps

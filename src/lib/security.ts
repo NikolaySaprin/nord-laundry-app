@@ -9,11 +9,16 @@ export function validateInternalUrl(url: string): boolean {
   try {
     const parsed = new URL(url);
     const hostname = parsed.hostname.toLowerCase();
+
+    // Allow only explicit internal hosts to avoid SSRF.
+    // By default permit loopback; optionally extend via INTERNAL_SERVICE_HOSTS env (comma-separated).
+    const extraHosts =
+      process.env.INTERNAL_SERVICE_HOSTS?.split(',')
+        .map((h) => h.trim().toLowerCase())
+        .filter(Boolean) || [];
+    const allowedHosts = new Set(['localhost', '127.0.0.1', '::1', ...extraHosts]);
     
-    // Allow only localhost or 127.0.0.1 (for local bot)
-    const allowedHosts = ['localhost', '127.0.0.1', '::1'];
-    
-    if (!allowedHosts.includes(hostname)) {
+    if (!allowedHosts.has(hostname)) {
       return false;
     }
     

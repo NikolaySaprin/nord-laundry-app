@@ -88,8 +88,7 @@ npm start
 │   └── middleware.ts      # Next.js middleware
 ├── public/                # Статические файлы
 ├── package.json           # Зависимости проекта
-├── next.config.js         # Конфигурация Next.js
-└── ecosystem.config.js    # PM2 конфигурация
+└── next.config.js         # Конфигурация Next.js
 ```
 
 ## SEO настройки
@@ -117,7 +116,7 @@ npm start
 ## Развертывание
 
 Проект готов для развертывания на:
-- VPS с Node.js и PM2
+- VPS с Docker и Docker Compose (рекомендуется)
 - Vercel
 - Netlify
 - AWS
