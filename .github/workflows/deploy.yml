@@ -24,7 +24,7 @@ jobs:
             if [ ! -d .git ]; then
               echo "==> First-time git init in working directory"
               git init -q
-              git remote add origin https://github.com/NikolaySaprin/nord-cleaning.git
+              git remote add origin https://github.com/NikolaySaprin/nord-laundry-app.git
             fi
 
             git fetch origin main
