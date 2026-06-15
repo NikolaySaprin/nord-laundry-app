@@ -118,8 +118,8 @@ export function Footer() {
                       АДРЕС:
                     </p>
                     <p className="text-white font-montserrat font-medium text-[1.5rem] leading-[1.5]">
-                      125502, г. Москва,<br />
-                      ул. Петрозаводская, д. 24, корп. 2
+                      109316, г. Москва,<br />
+                       ул. Талалихина, д. 41, с. 3
                     </p>
                   </div>
                 </div>
@@ -235,7 +235,7 @@ export function Footer() {
                     Адрес:
                   </p>
                   <p className="text-white font-montserrat font-medium text-[1.125rem] leading-[1.33]">
-                    125502, г. Москва, ул. Петрозаводская, д. 24, корп. 2
+                    109316, г. Москва, ул. Талалихина, д. 41, с. 3
                   </p>
                 </div>
               </div>
