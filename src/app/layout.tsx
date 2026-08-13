@@ -4,6 +4,7 @@ import './globals.css'
 import { Toaster } from "@/components/ui/toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { YandexMetrica } from "@/components/YandexMetrica"
+import { YANDEX_METRICA_SNIPPET } from "@/lib/yandex-metrica"
 import { NotificationProvider } from "@/contexts/notification-context"
 
 const montserrat = Montserrat({ 
@@ -71,21 +72,21 @@ export const metadata: Metadata = {
   },
   
   robots: {
-    index: false,
-    follow: false,
-    nocache: true,
+    index: true,
+    follow: true,
+    nocache: false,
     googleBot: {
-      index: false,
-      follow: false,
-      noimageindex: true,
-      'max-video-preview': 0,
-      'max-image-preview': 'none',
-      'max-snippet': 0,
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
   verification: {
-    google: 'your-google-verification-code',
-    yandex: 'your-yandex-verification-code',
+    google: 'pqMUKmE_a3rf8ajIMSJ3FBxAfbVHxNj9uWyO1To3GTE',
+    // yandex: '<код подтверждения из Яндекс.Вебмастера>',
   },
 }
 
@@ -171,10 +172,13 @@ export default function RootLayout({
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:type" content="image/png" />
-        <meta name="google-site-verification" content="pqMUKmE_a3rf8ajIMSJ3FBxAfbVHxNj9uWyO1To3GTE" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+        {/* Yandex.Metrika counter — в SSR-HTML, чтобы визит засчитывался до гидрации */}
+        <script
+          dangerouslySetInnerHTML={{ __html: YANDEX_METRICA_SNIPPET }}
         />
       </head>
       <body className={`${montserrat.variable} font-montserrat`}>

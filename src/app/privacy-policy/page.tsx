@@ -1,5 +1,14 @@
+import type { Metadata } from 'next';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
+
+export const metadata: Metadata = {
+  title: 'Политика конфиденциальности',
+  description: 'Политика конфиденциальности и использования файлов cookie сайта nord-laundry.ru.',
+  alternates: {
+    canonical: '/privacy-policy',
+  },
+};
 
 export default function PrivacyPolicyPage() {
   return (

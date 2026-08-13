@@ -70,7 +70,7 @@ const nextConfig = {
           },
           {
             key: 'X-Robots-Tag',
-            value: 'noindex, nofollow, noarchive, nosnippet',
+            value: 'index, follow, max-image-preview:large, max-snippet:-1',
           },
         ],
       },
