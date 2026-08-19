@@ -6,7 +6,6 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { useScrollLock } from '@/hooks/useScrollLock';
 import { sendYandexMetricaEvent, YandexMetricaEvents } from '@/lib/yandex-metrica';
-import { useNotification } from '@/contexts/notification-context';
 
 // Lazy load ContactModal - загружается только при клике
 const ContactModal = dynamic(() => import('./ContactModal').then(mod => ({ default: mod.ContactModal })), {
@@ -16,7 +15,6 @@ const ContactModal = dynamic(() => import('./ContactModal').then(mod => ({ defau
 export const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const { showSuccessNotification } = useNotification();
 
   useScrollLock(isMobileMenuOpen || isContactModalOpen);
 
@@ -62,7 +60,7 @@ export const Header = () => {
             <div className="hidden xl:block text-[#2C4495] font-montserrat font-medium text-[1rem] leading-[1.25]">
               +7 (950) 483-60-65
             </div>
-            
+
             {/* Phone - Icon for smaller screens */}
             <Link
               href="tel:+79504836065"
@@ -169,7 +167,7 @@ export const Header = () => {
       {/* Mobile Menu Popup */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div 
+          <div
             className="fixed inset-0 bg-black/50"
             onClick={() => setIsMobileMenuOpen(false)}
           />
@@ -201,8 +199,8 @@ export const Header = () => {
               {/* Navigation buttons */}
               <div className="mb-[40px] flex justify-center">
                 <div className="flex flex-col gap-[4px]">
-                  <Link 
-                    href="/#services" 
+                  <Link
+                    href="/#services"
                     className="text-[#2C4495] font-montserrat font-medium text-[16px] leading-[20px] uppercase text-center py-[12px] w-full block transition-colors relative z-10"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
@@ -213,8 +211,8 @@ export const Header = () => {
                   >
                     УСЛУГИ
                   </Link>
-                  <Link 
-                    href="/#pricing" 
+                  <Link
+                    href="/#pricing"
                     className="text-[#2C4495] font-montserrat font-medium text-[16px] leading-[20px] uppercase text-center py-[12px] w-full block transition-colors relative z-10"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
@@ -225,8 +223,8 @@ export const Header = () => {
                   >
                     ЦЕНЫ
                   </Link>
-                  <Link 
-                    href="/#promotions" 
+                  <Link
+                    href="/#promotions"
                     className="text-[#2C4495] font-montserrat font-medium text-[16px] leading-[20px] uppercase text-center py-[12px] w-full block transition-colors relative z-10"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
@@ -237,8 +235,8 @@ export const Header = () => {
                   >
                     АКЦИИ
                   </Link>
-                  <Link 
-                    href="/#packaging" 
+                  <Link
+                    href="/#packaging"
                     className="text-[#2C4495] font-montserrat font-medium text-[16px] leading-[20px] uppercase text-center py-[12px] w-full block transition-colors relative z-10"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
@@ -249,8 +247,8 @@ export const Header = () => {
                   >
                     УПАКОВКА
                   </Link>
-                  <Link 
-                    href="/#clients-cases" 
+                  <Link
+                    href="/#clients-cases"
                     className="text-[#2C4495] font-montserrat font-medium text-[16px] leading-[20px] uppercase text-center py-[12px] w-full block transition-colors relative z-10"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
@@ -261,8 +259,8 @@ export const Header = () => {
                   >
                     КЕЙСЫ
                   </Link>
-                  <Link 
-                    href="/#footer" 
+                  <Link
+                    href="/#footer"
                     className="text-[#2C4495] font-montserrat font-medium text-[16px] leading-[20px] uppercase text-center py-[12px] w-full block transition-colors relative z-10"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
@@ -278,7 +276,7 @@ export const Header = () => {
 
               {/* Contact buttons */}
               <div className="space-y-[16px] mt-auto relative z-20">
-                <Link 
+                <Link
                   href="https://wa.me/79504836065"
                   className="w-[85%] mx-auto bg-transparent border border-[#2C4495] text-[#2C4495] font-montserrat font-medium text-[14px] leading-[24px] px-[20px] py-[12px] rounded-[50px] flex items-center justify-center transition-colors relative h-[48px] pr-[60px]"
                   onClick={() => {
@@ -292,7 +290,7 @@ export const Header = () => {
                   <Image src="/assets/whatsapp-icon.svg" alt="WhatsApp" width={28} height={28} className="absolute right-[20px] top-1/2 transform -translate-y-1/2 object-contain" />
                 </Link>
 
-                <Link 
+                <Link
                   href="https://t.me/nord_laundry_bot"
                   className="w-[85%] mx-auto bg-transparent border border-[#2C4495] text-[#2C4495] font-montserrat font-medium text-[14px] leading-[24px] px-[20px] py-[12px] rounded-[50px] flex items-center justify-center transition-colors relative h-[48px] pr-[60px]"
                   onClick={() => {
@@ -306,7 +304,7 @@ export const Header = () => {
                   <Image src="/assets/telegram-icon.svg" alt="Telegram" width={28} height={28} className="absolute right-[20px] top-1/2 transform -translate-y-1/2 object-contain" />
                 </Link>
 
-                <Link 
+                <Link
                   href="tel:+79504836065"
                   className="w-[85%] mx-auto bg-transparent border border-[#2C4495] text-[#2C4495] font-montserrat font-medium text-[14px] leading-[24px] px-[20px] py-[12px] rounded-[50px] flex items-center justify-center transition-colors relative h-[48px] pr-[60px]"
                   onClick={() => {
@@ -323,7 +321,7 @@ export const Header = () => {
         </div>
       )}
 
-      <ContactModal 
+      <ContactModal
         isOpen={isContactModalOpen}
         onClose={() => {
           setIsContactModalOpen(false);
@@ -335,9 +333,6 @@ export const Header = () => {
             (document.body.style as any).touchAction = '';
             (document.body.style as any).overscrollBehavior = '';
           }, 100);
-        }}
-        onSuccess={() => {
-          showSuccessNotification();
         }}
       />
 
