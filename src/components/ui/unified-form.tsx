@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { unifiedFormSchema, UnifiedFormData, formatPhoneNumber } from '@/lib/form-validation';
+import { unifiedFormSchema, UnifiedFormData } from '@/lib/form-validation';
 import { useFormSubmit } from '@/hooks/use-form-submit';
 import { useNotification } from '@/contexts/notification-context';
 import { UnifiedFormProps } from '@/types/components';
@@ -20,7 +21,8 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
   onSuccess,
   className = ''
 }) => {
-  const { showSuccessNotification, showRateLimitNotification } = useNotification();
+  const { showRateLimitNotification } = useNotification();
+  const router = useRouter();
 
   const form = useForm<UnifiedFormData>({
     resolver: zodResolver(unifiedFormSchema),
@@ -30,7 +32,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
       name: '',
       phone: '',
       sphere: '',
-      privacy: false
+      privacy: true
     }
   });
 
@@ -40,8 +42,8 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
       if (onSuccess) {
         onSuccess();
       }
-      
-      showSuccessNotification();
+
+      router.push('/thanks');
     }
   });
 
@@ -49,11 +51,11 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    
+
     const checkDesktop = () => {
       setIsDesktop(window.innerWidth >= 640); // sm breakpoint
     };
-    
+
     checkDesktop();
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);
@@ -72,8 +74,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formatted = formatPhoneNumber(e.target.value);
-    form.setValue('phone', formatted);
+    form.setValue('phone', e.target.value);
   };
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -86,17 +87,6 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
 
   const handlePrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     form.setValue('privacy', e.target.checked);
-  };
-
-  const handlePhoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.currentTarget.type === 'tel') {
-      if (
-        !/[0-9]/.test(e.key) &&
-        !['Backspace', 'Delete', 'Tab', 'Escape', 'Enter', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
-      ) {
-        e.preventDefault();
-      }
-    }
   };
 
   return (
@@ -127,7 +117,6 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
             placeholder="+7 (999) 999-99-99"
             value={form.watch('phone') || ''}
             onChange={handlePhoneChange}
-            onKeyDown={handlePhoneKeyDown}
             className="flex-1 text-[#202124] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5] bg-transparent border-none outline-none"
           />
           <Image src="/form-icon/phone-Icon.svg" alt="" width={24} height={24} className="object-contain" />
@@ -194,17 +183,17 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
                 {submitError}
               </p>
               <div className="flex items-center justify-center gap-4">
-                <Link 
-                  href="tel:+79504836065" 
+                <Link
+                  href="tel:+79504836065"
                   onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
                   className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
                   aria-label="Позвонить"
                 >
                   <Image src="/assets/phone-icon.svg" alt="Телефон" fill className="object-contain" />
                 </Link>
-                <Link 
-                  href="https://wa.me/79504836065" 
-                  target="_blank" 
+                <Link
+                  href="https://wa.me/79504836065"
+                  target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}
                   className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
@@ -212,9 +201,9 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
                 >
                   <Image src="/assets/whatsapp-icon.svg" alt="WhatsApp" fill className="object-contain" />
                 </Link>
-                <Link 
-                  href="https://t.me/nord_laundry_bot" 
-                  target="_blank" 
+                <Link
+                  href="https://t.me/nord_laundry_bot"
+                  target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.TELEGRAM)}
                   className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
