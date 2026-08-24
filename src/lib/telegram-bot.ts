@@ -76,7 +76,11 @@ export class TelegramNotificationService {
     if (application.sphere) {
       message += `\n🏢 Сфера: ${application.sphere}`;
     }
-    
+
+    if (application.email) {
+      message += `\n📧 Email: ${application.email}`;
+    }
+
     const moscowTime = new Date().toLocaleString('ru-RU', { 
       timeZone: 'Europe/Moscow',
       year: 'numeric',

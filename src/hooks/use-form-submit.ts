@@ -40,6 +40,7 @@ export function useFormSubmit({
         ...data,
         name: sanitizeText(data.name),
         sphere: data.sphere ? sanitizeText(data.sphere) : undefined,
+        email: data.email ? sanitizeText(data.email) : undefined,
         phone: normalizePhoneNumber(sanitizeText(data.phone)),
         source
       };

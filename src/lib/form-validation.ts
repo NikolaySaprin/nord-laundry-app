@@ -14,7 +14,8 @@ export const baseFormSchema = z.object({
 });
 
 export const unifiedFormSchema = baseFormSchema.extend({
-  sphere: z.string().optional() // Используется для sphere или industry
+  sphere: z.string().optional(), // Используется для sphere или industry
+  email: z.string().email("Введите корректный email").optional().or(z.literal(''))
 });
 
 export type UnifiedFormData = z.infer<typeof unifiedFormSchema>;

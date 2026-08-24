@@ -37,7 +37,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const body = await request.json();
     
     // Sanitize expected text fields defensively before validation
-    const sanitizedBody = sanitizePayload(body, ['name', 'phone', 'sphere'] as any);
+    const sanitizedBody = sanitizePayload(body, ['name', 'phone', 'sphere', 'email'] as any);
     const validationResult = extendedFormSchema.safeParse(sanitizedBody);
     if (!validationResult.success) {
       return NextResponse.json(
@@ -50,6 +50,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       name: validationResult.data.name,
       phone: validationResult.data.phone,
       sphere: validationResult.data.sphere || '',
+      email: validationResult.data.email || '',
       source: body.source || 'website_form',
     };
 
@@ -69,6 +70,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         name: application.name,
         phone: redactPhone(application.phone),
         sphere: application.sphere ? '[provided]' : '[empty]',
+        email: application.email ? '[provided]' : '[empty]',
         source: application.source,
       },
       timestamp: new Date().toISOString()

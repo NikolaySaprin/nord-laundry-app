@@ -48,7 +48,7 @@ export const RateLimitNotification: React.FC<RateLimitNotificationProps> = ({
             </span>
             <div className="flex items-center justify-start gap-3 mt-3">
               <Link 
-                href="tel:+79504836065" 
+                href="tel:+79154268594" 
                 onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
                 className="w-[1.75rem] h-[1.75rem] sm:w-[2rem] sm:h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity [&>img]:brightness-0 [&>img]:invert"
                 aria-label="Позвонить"
@@ -56,7 +56,7 @@ export const RateLimitNotification: React.FC<RateLimitNotificationProps> = ({
                 <Image src="/assets/phone-icon.svg" alt="Телефон" fill className="object-contain" />
               </Link>
               <Link 
-                href="https://wa.me/79504836065" 
+                href="https://wa.me/79154268594" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}

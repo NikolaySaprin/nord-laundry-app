@@ -32,6 +32,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
       name: '',
       phone: '',
       sphere: '',
+      email: '',
       privacy: true
     }
   });
@@ -48,6 +49,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
   });
 
   const [isDesktop, setIsDesktop] = useState(false);
+  const [showEmailField, setShowEmailField] = useState(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -83,6 +85,10 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
 
   const handleSphereChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     form.setValue('sphere', e.target.value);
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    form.setValue('email', e.target.value);
   };
 
   const handlePrivacyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,6 +132,40 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
             {form.formState.errors.phone.message}
           </p>
         )}
+
+        {/* Необязательное поле email */}
+        {!showEmailField && (
+          <button
+            type="button"
+            onClick={() => setShowEmailField(true)}
+            className="text-[#3264F6] font-montserrat font-normal text-[0.875rem] leading-[1.43] hover:underline text-left"
+          >
+            + Добавить email
+          </button>
+        )}
+
+        <div
+          className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+          style={{ gridTemplateRows: showEmailField ? '1fr' : '0fr' }}
+        >
+          <div className="overflow-hidden">
+            <div className="flex items-center gap-[0.5rem] p-[0.625rem_1rem] border border-[#D7DAE2] rounded-[0.5rem] bg-white">
+              <input
+                type="email"
+                placeholder="Ваш email (не обязательно)"
+                value={form.watch('email') || ''}
+                onChange={handleEmailChange}
+                className="flex-1 text-[#202124] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5] bg-transparent border-none outline-none"
+              />
+              <Image src="/form-icon/mail-Icon.svg" alt="" width={24} height={24} className="object-contain" />
+            </div>
+            {form.formState.errors.email && (
+              <p className="text-red-500 text-xs mt-1">
+                {form.formState.errors.email.message}
+              </p>
+            )}
+          </div>
+        </div>
 
         {/* Поле сферы (если включено) */}
         {showSphereField && (
@@ -184,7 +224,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
-                  href="tel:+79504836065"
+                  href="tel:+79154268594"
                   onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
                   className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
                   aria-label="Позвонить"
@@ -192,7 +232,7 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
                   <Image src="/assets/phone-icon.svg" alt="Телефон" fill className="object-contain" />
                 </Link>
                 <Link
-                  href="https://wa.me/79504836065"
+                  href="https://wa.me/79154268594"
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.WHATS)}

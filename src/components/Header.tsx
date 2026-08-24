@@ -58,12 +58,12 @@ export const Header = () => {
           <div className="flex items-center gap-[1.5rem]">
             {/* Phone - Full number for larger screens */}
             <div className="hidden xl:block text-[#2C4495] font-montserrat font-medium text-[1rem] leading-[1.25]">
-              +7 (950) 483-60-65
+              +7 (915) 426-85-94
             </div>
 
             {/* Phone - Icon for smaller screens */}
             <Link
-              href="tel:+79504836065"
+              href="tel:+79154268594"
               className="xl:hidden flex items-center justify-center w-[1.75rem] h-[1.75rem] relative"
               title="Позвонить"
               onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
@@ -74,7 +74,7 @@ export const Header = () => {
             {/* Social Links */}
             <div className="flex items-center gap-[0.875rem]">
               <Link
-                href="https://wa.me/79504836065"
+                href="https://wa.me/79154268594"
                 className="flex items-center justify-center w-[1.75rem] h-[1.75rem] relative"
                 title="WhatsApp"
                 target="_blank"
@@ -119,7 +119,7 @@ export const Header = () => {
         <div className="flex items-center justify-center flex-1 mx-auto">
           <div className="flex items-center gap-[1.25rem]">
             <Link
-              href="https://wa.me/79504836065"
+              href="https://wa.me/79154268594"
               className="flex items-center justify-center w-[1.5rem] h-[1.5rem] relative"
               title="WhatsApp"
               target="_blank"
@@ -139,7 +139,7 @@ export const Header = () => {
               <Image src="/assets/telegram-icon.svg" alt="Telegram" fill className="object-contain" />
             </Link>
             <Link
-              href="tel:+79504836065"
+              href="tel:+79154268594"
               className="flex items-center justify-center w-[1.5rem] h-[1.5rem] relative"
               title="Позвонить"
               onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
@@ -277,7 +277,7 @@ export const Header = () => {
               {/* Contact buttons */}
               <div className="space-y-[16px] mt-auto relative z-20">
                 <Link
-                  href="https://wa.me/79504836065"
+                  href="https://wa.me/79154268594"
                   className="w-[85%] mx-auto bg-transparent border border-[#2C4495] text-[#2C4495] font-montserrat font-medium text-[14px] leading-[24px] px-[20px] py-[12px] rounded-[50px] flex items-center justify-center transition-colors relative h-[48px] pr-[60px]"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
@@ -305,7 +305,7 @@ export const Header = () => {
                 </Link>
 
                 <Link
-                  href="tel:+79504836065"
+                  href="tel:+79154268594"
                   className="w-[85%] mx-auto bg-transparent border border-[#2C4495] text-[#2C4495] font-montserrat font-medium text-[14px] leading-[24px] px-[20px] py-[12px] rounded-[50px] flex items-center justify-center transition-colors relative h-[48px] pr-[60px]"
                   onClick={() => {
                     setIsMobileMenuOpen(false);
