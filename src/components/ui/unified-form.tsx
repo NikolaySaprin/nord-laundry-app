@@ -134,15 +134,23 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
         )}
 
         {/* Необязательное поле email */}
-        {!showEmailField && (
-          <button
-            type="button"
-            onClick={() => setShowEmailField(true)}
-            className="text-[#3264F6] font-montserrat font-normal text-[0.875rem] leading-[1.43] hover:underline text-left"
-          >
-            + Добавить email
-          </button>
-        )}
+        <div
+          className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+          style={{ gridTemplateRows: showEmailField ? '0fr' : '1fr' }}
+        >
+          <div className="overflow-hidden">
+            <button
+              type="button"
+              onClick={() => setShowEmailField(true)}
+              className="w-full flex items-center gap-[0.5rem] p-[0.625rem_1rem] border border-[#D7DAE2] rounded-[0.5rem] bg-white text-left"
+            >
+              <span className="flex-1 text-[#999EAD] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5]">
+                Добавить email (не обязательно)
+              </span>
+              <Image src="/form-icon/mail-Icon.svg" alt="" width={24} height={24} className="object-contain" />
+            </button>
+          </div>
+        </div>
 
         <div
           className="grid transition-[grid-template-rows] duration-300 ease-in-out"
