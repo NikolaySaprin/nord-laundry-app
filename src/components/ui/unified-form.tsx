@@ -134,44 +134,46 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
         )}
 
         {/* Необязательное поле email */}
-        <div
-          className="grid transition-[grid-template-rows] duration-300 ease-in-out"
-          style={{ gridTemplateRows: showEmailField ? '0fr' : '1fr' }}
-        >
-          <div className="overflow-hidden">
-            <button
-              type="button"
-              onClick={() => setShowEmailField(true)}
-              className="w-full flex items-center gap-[0.5rem] p-[0.625rem_1rem] border border-[#D7DAE2] rounded-[0.5rem] bg-white text-left"
-            >
-              <span className="flex-1 text-[#999EAD] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5]">
-                Добавить email (не обязательно)
-              </span>
-              <Image src="/form-icon/mail-Icon.svg" alt="" width={24} height={24} className="object-contain" />
-            </button>
-          </div>
-        </div>
-
-        <div
-          className="grid transition-[grid-template-rows] duration-300 ease-in-out"
-          style={{ gridTemplateRows: showEmailField ? '1fr' : '0fr' }}
-        >
-          <div className="overflow-hidden">
-            <div className="flex items-center gap-[0.5rem] p-[0.625rem_1rem] border border-[#D7DAE2] rounded-[0.5rem] bg-white">
-              <input
-                type="email"
-                placeholder="Ваш email (не обязательно)"
-                value={form.watch('email') || ''}
-                onChange={handleEmailChange}
-                className="flex-1 text-[#202124] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5] bg-transparent border-none outline-none"
-              />
-              <Image src="/form-icon/mail-Icon.svg" alt="" width={24} height={24} className="object-contain" />
+        <div>
+          <div
+            className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+            style={{ gridTemplateRows: showEmailField ? '0fr' : '1fr' }}
+          >
+            <div className="overflow-hidden">
+              <button
+                type="button"
+                onClick={() => setShowEmailField(true)}
+                className="w-full flex items-center gap-[0.5rem] p-[0.625rem_1rem] border border-[#D7DAE2] rounded-[0.5rem] bg-white text-left"
+              >
+                <span className="flex-1 text-[#999EAD] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5]">
+                  Добавить email (не обязательно)
+                </span>
+                <Image src="/form-icon/mail-Icon.svg" alt="" width={24} height={24} className="object-contain" />
+              </button>
             </div>
-            {form.formState.errors.email && (
-              <p className="text-red-500 text-xs mt-1">
-                {form.formState.errors.email.message}
-              </p>
-            )}
+          </div>
+
+          <div
+            className="grid transition-[grid-template-rows] duration-300 ease-in-out"
+            style={{ gridTemplateRows: showEmailField ? '1fr' : '0fr' }}
+          >
+            <div className="overflow-hidden">
+              <div className="flex items-center gap-[0.5rem] p-[0.625rem_1rem] border border-[#D7DAE2] rounded-[0.5rem] bg-white">
+                <input
+                  type="email"
+                  placeholder="Ваш email (не обязательно)"
+                  value={form.watch('email') || ''}
+                  onChange={handleEmailChange}
+                  className="flex-1 text-[#202124] font-montserrat font-normal text-[0.875rem] lg:text-[1rem] leading-[1.71] lg:leading-[1.5] bg-transparent border-none outline-none"
+                />
+                <Image src="/form-icon/mail-Icon.svg" alt="" width={24} height={24} className="object-contain" />
+              </div>
+              {form.formState.errors.email && (
+                <p className="text-red-500 text-xs mt-1">
+                  {form.formState.errors.email.message}
+                </p>
+              )}
+            </div>
           </div>
         </div>
 
