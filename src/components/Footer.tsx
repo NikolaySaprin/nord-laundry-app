@@ -56,14 +56,6 @@ export function Footer() {
                   </Link>
                 </Button>
 
-                <Button asChild className="bg-transparent border border-white text-white font-montserrat font-medium text-[1rem] leading-[1.5] px-[2.125rem] py-[1.6875rem] rounded-[3.125rem] flex items-center justify-center w-[20.36rem] h-[3.5rem] uppercase hover:bg-white/10 transition-colors relative">
-                  <Link href="tel:+79154268594" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}>
-                    <span className="absolute left-1/2 transform -translate-x-1/2">Позвонить</span>
-                    <div className="w-[2rem] h-[2rem] relative ml-[13.5rem]">
-                      <Image src="/assets/phone-icon.svg" alt="Phone" fill className="object-contain" />
-                    </div>
-                  </Link>
-                </Button>
               </div>
             </div>
 
@@ -95,15 +87,6 @@ export function Footer() {
                   Контакты:
                 </h3>
                 <div className="space-y-[1.5rem] -mt-[2.5rem]">
-                  <div>
-                    <p className="text-white/50 font-montserrat font-medium text-[1rem] leading-[1.5] uppercase mb-2">
-                      ТЕЛЕФОН:
-                    </p>
-                    <Link href="tel:+79154268594" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)} className="text-white font-montserrat font-medium text-[1.5rem] leading-[1] hover:text-white/80 transition-colors" >
-                      +7 (915) 426-85-94
-                    </Link>
-                  </div>
-
                   <div>
                     <p className="text-white/50 font-montserrat font-medium text-[1rem] leading-[1.5] uppercase mb-2">
                       ПОЧТА:
@@ -195,14 +178,6 @@ export function Footer() {
                 </Link>
               </Button>
 
-              <Button asChild className="bg-transparent border border-white text-white font-montserrat font-medium text-[0.875rem] leading-[1.71] px-[2.125rem] py-[1rem] rounded-[3.125rem] flex items-center justify-end w-full uppercase relative">
-                <Link href="tel:+79154268594" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}>
-                  <span className="absolute left-1/2 transform -translate-x-1/2">Позвонить</span>
-                  <div className="w-[1.5rem] h-[1.5rem] relative ml-[4rem]">
-                    <Image src="/assets/phone-icon.svg" alt="Phone" fill className="object-contain" />
-                  </div>
-                </Link>
-              </Button>
             </div>
 
             {/* Contact Information */}
@@ -212,15 +187,6 @@ export function Footer() {
               </h3>
 
               <div className="space-y-[2.125rem]">
-                <div>
-                  <p className="text-white/50 font-montserrat font-medium text-[0.875rem] leading-[1.71] uppercase">
-                    ТЕЛЕФОН:
-                  </p>
-                  <Link href="tel:+79154268594" onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)} className="text-white font-montserrat font-medium text-[1.125rem] leading-[1.33] hover:text-white/80 transition-colors">
-                    +7 (915) 426-85-94
-                  </Link>
-                </div>
-
                 <div>
                   <p className="text-white/50 font-montserrat font-medium text-[0.875rem] leading-[1.71] uppercase">
                     Почта:

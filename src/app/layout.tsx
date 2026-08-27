@@ -99,7 +99,7 @@ const structuredData = {
   "logo": "https://nord-laundry.ru/assets/logo_nord.svg",
   "contactPoint": {
     "@type": "ContactPoint",
-    "telephone": "+7-915-426-85-94",
+    "email": "nordlaundry@gmail.com",
     "contactType": "customer service",
     "availableLanguage": "Russian"
   },

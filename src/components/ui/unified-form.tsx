@@ -234,14 +234,6 @@ export const UnifiedForm: React.FC<UnifiedFormProps> = ({
               </p>
               <div className="flex items-center justify-center gap-4">
                 <Link
-                  href="tel:+79154268594"
-                  onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
-                  className="w-[2rem] h-[2rem] relative flex-shrink-0 hover:opacity-80 transition-opacity"
-                  aria-label="Позвонить"
-                >
-                  <Image src="/assets/phone-icon.svg" alt="Телефон" fill className="object-contain" />
-                </Link>
-                <Link
                   href="https://wa.me/79154268594"
                   target="_blank"
                   rel="noopener noreferrer"

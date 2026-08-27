@@ -56,21 +56,6 @@ export const Header = () => {
 
           {/* Contact Info & CTA */}
           <div className="flex items-center gap-[1.5rem]">
-            {/* Phone - Full number for larger screens */}
-            <div className="hidden xl:block text-[#2C4495] font-montserrat font-medium text-[1rem] leading-[1.25]">
-              +7 (915) 426-85-94
-            </div>
-
-            {/* Phone - Icon for smaller screens */}
-            <Link
-              href="tel:+79154268594"
-              className="xl:hidden flex items-center justify-center w-[1.75rem] h-[1.75rem] relative"
-              title="Позвонить"
-              onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
-            >
-              <Image src="/assets/phone-icon.svg" alt="Phone" fill className="object-contain" />
-            </Link>
-
             {/* Social Links */}
             <div className="flex items-center gap-[0.875rem]">
               <Link
@@ -137,14 +122,6 @@ export const Header = () => {
               onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.TELEGRAM)}
             >
               <Image src="/assets/telegram-icon.svg" alt="Telegram" fill className="object-contain" />
-            </Link>
-            <Link
-              href="tel:+79154268594"
-              className="flex items-center justify-center w-[1.5rem] h-[1.5rem] relative"
-              title="Позвонить"
-              onClick={() => sendYandexMetricaEvent(YandexMetricaEvents.PHONE)}
-            >
-              <Image src="/assets/phone-icon.svg" alt="Phone" fill className="object-contain" />
             </Link>
           </div>
         </div>
@@ -304,17 +281,6 @@ export const Header = () => {
                   <Image src="/assets/telegram-icon.svg" alt="Telegram" width={28} height={28} className="absolute right-[20px] top-1/2 transform -translate-y-1/2 object-contain" />
                 </Link>
 
-                <Link
-                  href="tel:+79154268594"
-                  className="w-[85%] mx-auto bg-transparent border border-[#2C4495] text-[#2C4495] font-montserrat font-medium text-[14px] leading-[24px] px-[20px] py-[12px] rounded-[50px] flex items-center justify-center transition-colors relative h-[48px] pr-[60px]"
-                  onClick={() => {
-                    setIsMobileMenuOpen(false);
-                    sendYandexMetricaEvent(YandexMetricaEvents.PHONE);
-                  }}
-                >
-                  ПОЗВОНИТЬ
-                  <Image src="/assets/phone-icon.svg" alt="Phone" width={28} height={28} className="absolute right-[20px] top-1/2 transform -translate-y-1/2 object-contain" />
-                </Link>
               </div>
             </div>
           </div>
