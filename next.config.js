@@ -18,11 +18,12 @@ const nextConfig = {
             value: [
               "default-src 'self'",
               // Next.js requires 'unsafe-inline' and 'unsafe-eval' for hydration and dynamic imports
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://mc.yandex.ru",
-              "connect-src 'self' https://mc.yandex.ru",
-              "img-src 'self' data: https://mc.yandex.ru blob:",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://mc.yandex.ru https://smartcaptcha.cloud.yandex.ru",
+              "connect-src 'self' https://mc.yandex.ru https://smartcaptcha.cloud.yandex.ru",
+              "img-src 'self' data: https://mc.yandex.ru https://smartcaptcha.cloud.yandex.ru blob:",
               "style-src 'self' 'unsafe-inline'",
               "font-src 'self' data:",
+              "frame-src https://smartcaptcha.cloud.yandex.ru",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",

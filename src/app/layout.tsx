@@ -6,6 +6,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { YandexMetrica } from "@/components/YandexMetrica"
 import { YANDEX_METRICA_SNIPPET } from "@/lib/yandex-metrica"
 import { NotificationProvider } from "@/contexts/notification-context"
+import { EntryCaptcha } from "@/components/EntryCaptcha"
 
 const montserrat = Montserrat({ 
   subsets: ['latin', 'cyrillic'],
@@ -157,6 +158,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const entryCaptchaClientKey = process.env.YANDEX_SMARTCAPTCHA_CLIENT_KEY || ''
+
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
@@ -183,6 +186,7 @@ export default function RootLayout({
       </head>
       <body className={`${montserrat.variable} font-montserrat`}>
         <YandexMetrica />
+        <EntryCaptcha clientKey={entryCaptchaClientKey} />
         <TooltipProvider>
           <NotificationProvider>
             {children}
